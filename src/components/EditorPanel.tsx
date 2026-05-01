@@ -20,10 +20,22 @@ type EditorPanelProps = {
 };
 
 const VARIANT_OPTIONS: { label: string; value: Variant }[] = [
-  { label: 'Mẫu 1', value: '1' },
-  { label: 'Mẫu 2', value: '2' },
-  { label: 'Mẫu 3', value: '3' },
+  { label: 'Mau 1', value: '1' },
+  { label: 'Mau 2', value: '2' },
+  { label: 'Mau 3', value: '3' },
+  { label: 'Steps', value: '4' },
+  { label: 'Fact', value: '5' },
+  { label: 'Q&A', value: '6' },
+  { label: 'Loi', value: '7' },
+  { label: 'Quote', value: '8' },
 ];
+
+const getListLabel = (variant: Variant) => {
+  if (variant === '4') return 'Cac buoc: Tieu de|Mo ta';
+  if (variant === '7') return 'Cac loi: Van de|Cach khac phuc';
+  if (variant === '1') return 'Danh sach cac y';
+  return 'Danh sach y phu';
+};
 
 const EditorPanel = memo(
   ({
@@ -38,13 +50,25 @@ const EditorPanel = memo(
     onRemoveParagraphItem,
     onVariantChange,
   }: EditorPanelProps) => {
-    const showListEditor = variant === '1' || variant === '3';
+    const showListEditor = ['1', '3', '4', '7'].includes(variant);
+    const showParagraphEditor = variant === '2' || variant === '6';
+    const showHighlightEditor = ['3', '5', '6', '8'].includes(variant);
+    const paragraphLabel =
+      variant === '6' ? 'Cau tra loi, moi dong la mot doan' : 'Doan van noi dung';
+    const highlightLabel =
+      variant === '6'
+        ? 'Cau hoi'
+        : variant === '8'
+          ? 'Noi dung quote'
+          : variant === '5'
+            ? 'Noi dung fact'
+            : 'Noi dung lam noi bat';
 
     return (
       <S.EditorSection>
-        <S.EditorTitle>Thiết kế nội dung</S.EditorTitle>
+        <S.EditorTitle>Thiet ke noi dung</S.EditorTitle>
 
-        <S.FieldLabel>Chọn mẫu Card</S.FieldLabel>
+        <S.FieldLabel>Chon mau Card</S.FieldLabel>
         <S.OptionSelector>
           {VARIANT_OPTIONS.map((option) => (
             <S.OptionButton
@@ -59,7 +83,7 @@ const EditorPanel = memo(
         </S.OptionSelector>
 
         <S.InputGroup>
-          <label>Tiêu đề phụ (Subtitle)</label>
+          <label>Tieu de phu (Subtitle)</label>
           <input
             value={content.subTitle}
             onChange={(event) => onContentChange('subTitle', event.target.value)}
@@ -67,7 +91,7 @@ const EditorPanel = memo(
         </S.InputGroup>
 
         <S.InputGroup>
-          <label>Tiêu đề chính (Title)</label>
+          <label>Tieu de chinh (Title)</label>
           <textarea
             value={content.title}
             onChange={(event) => onContentChange('title', event.target.value)}
@@ -75,7 +99,7 @@ const EditorPanel = memo(
         </S.InputGroup>
 
         <S.InputGroup>
-          <label>Mô tả ngắn (Description)</label>
+          <label>Mo ta ngan (Description)</label>
           <input
             value={content.description}
             onChange={(event) =>
@@ -84,9 +108,21 @@ const EditorPanel = memo(
           />
         </S.InputGroup>
 
-        {variant === '2' && (
+        {showHighlightEditor && (
           <S.InputGroup>
-            <label>Đoạn văn nội dung</label>
+            <label>{highlightLabel}</label>
+            <textarea
+              value={content.highlight}
+              onChange={(event) =>
+                onContentChange('highlight', event.target.value)
+              }
+            />
+          </S.InputGroup>
+        )}
+
+        {showParagraphEditor && (
+          <S.InputGroup>
+            <label>{paragraphLabel}</label>
             {content.paragraphItems.map((item, index) => (
               <S.ListItemInput key={index}>
                 <S.DynamicTextarea
@@ -96,7 +132,7 @@ const EditorPanel = memo(
                   }
                 />
                 <S.IconButton
-                  aria-label="Xóa đoạn văn"
+                  aria-label="Xoa doan van"
                   disabled={content.paragraphItems.length === 1}
                   onClick={() => onRemoveParagraphItem(index)}
                   type="button"
@@ -107,30 +143,14 @@ const EditorPanel = memo(
             ))}
             <S.AddItemButton onClick={onAddParagraphItem} type="button">
               <Plus size={16} />
-              Thêm đoạn văn
+              Them doan van
             </S.AddItemButton>
-          </S.InputGroup>
-        )}
-
-        {variant === '3' && (
-          <S.InputGroup>
-            <label>Nội dung làm nổi bật (Highlight)</label>
-            <textarea
-              value={content.highlight}
-              onChange={(event) =>
-                onContentChange('highlight', event.target.value)
-              }
-            />
           </S.InputGroup>
         )}
 
         {showListEditor && (
           <S.InputGroup>
-            <label>
-              {variant === '1'
-                ? 'Danh sách các ý (List Items)'
-                : 'Danh sách ý phụ'}
-            </label>
+            <label>{getListLabel(variant)}</label>
             {content.listItems.map((item, index) => (
               <S.ListItemInput key={index}>
                 <input
@@ -140,7 +160,7 @@ const EditorPanel = memo(
                   }
                 />
                 <S.IconButton
-                  aria-label="Xóa ý"
+                  aria-label="Xoa y"
                   disabled={content.listItems.length === 1}
                   onClick={() => onRemoveListItem(index)}
                   type="button"
@@ -151,11 +171,28 @@ const EditorPanel = memo(
             ))}
             <S.AddItemButton onClick={onAddListItem} type="button">
               <Plus size={16} />
-              Thêm ý
+              Them y
             </S.AddItemButton>
           </S.InputGroup>
         )}
 
+        {variant === '8' && (
+          <S.InputGroup>
+            <label>Tac gia quote</label>
+            <input
+              value={content.paragraphItems[0] || ''}
+              onChange={(event) => onParagraphItemChange(0, event.target.value)}
+            />
+          </S.InputGroup>
+        )}
+
+        <S.InputGroup>
+          <label>Handle footer</label>
+          <input
+            value={content.handle}
+            onChange={(event) => onContentChange('handle', event.target.value)}
+          />
+        </S.InputGroup>
       </S.EditorSection>
     );
   },

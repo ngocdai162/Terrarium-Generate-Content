@@ -1,5 +1,5 @@
 import { forwardRef, memo } from 'react';
-import { Leaf } from 'lucide-react';
+import { AlertTriangle, Leaf, Sprout } from 'lucide-react';
 import * as S from '../styles';
 import type { CardContent, ExportProfile, Variant } from '../types';
 
@@ -12,6 +12,85 @@ type CardPreviewProps = {
 
 const VariantContent = memo(
   ({ content, variant }: Pick<CardPreviewProps, 'content' | 'variant'>) => {
+    if (variant === '4') {
+      return (
+        <S.StepList>
+          {content.listItems.map((item, index) => {
+            const [title, body = ''] = item.split('|');
+            return (
+              <S.StepCard key={`${item}-${index}`}>
+                <S.StepNumber>{String(index + 1).padStart(2, '0')}</S.StepNumber>
+                <S.StepText>
+                  <strong>{title}</strong>
+                  {body && <span>{body}</span>}
+                </S.StepText>
+              </S.StepCard>
+            );
+          })}
+        </S.StepList>
+      );
+    }
+
+    if (variant === '5') {
+      return (
+        <S.FactBox>
+          <S.FactIcon>
+            <Sprout size={58} fill="#b8ff55" />
+          </S.FactIcon>
+          <S.FactText>{content.highlight}</S.FactText>
+        </S.FactBox>
+      );
+    }
+
+    if (variant === '6') {
+      return (
+        <S.QaContent>
+          <S.QuestionBox>
+            <S.QaMark>Q:</S.QaMark>
+            <span>{content.highlight}</span>
+          </S.QuestionBox>
+          <S.AnswerBox>
+            <S.QaMark $answer>A:</S.QaMark>
+            <S.AnswerText>
+              {content.paragraphItems.map((item, index) => (
+                <p key={`${item}-${index}`}>{item}</p>
+              ))}
+            </S.AnswerText>
+          </S.AnswerBox>
+        </S.QaContent>
+      );
+    }
+
+    if (variant === '7') {
+      return (
+        <S.IssueList>
+          {content.listItems.map((item, index) => {
+            const [title, body = ''] = item.split('|');
+            return (
+              <S.IssueCard key={`${item}-${index}`}>
+                <span>
+                  <AlertTriangle size={16} fill="#ff6b7a" />
+                  {title}
+                </span>
+                {body && <strong>{body}</strong>}
+              </S.IssueCard>
+            );
+          })}
+        </S.IssueList>
+      );
+    }
+
+    if (variant === '8') {
+      return (
+        <S.QuoteBox>
+          <S.QuoteMark>"</S.QuoteMark>
+          <S.QuoteText>{content.highlight}</S.QuoteText>
+          <S.QuoteDivider />
+          <S.QuoteAuthor>{content.paragraphItems[0] || 'Happy Terrarium'}</S.QuoteAuthor>
+        </S.QuoteBox>
+      );
+    }
+
     if (variant === '2') {
       return (
         <S.ParagraphContainer>
@@ -75,6 +154,8 @@ const CardPreview = memo(
           </S.HeaderBlock>
 
           <VariantContent content={content} variant={variant} />
+
+          <S.FooterHandle>{content.handle}</S.FooterHandle>
         </S.CardOverlay>
       </S.CardPreview>
     ),

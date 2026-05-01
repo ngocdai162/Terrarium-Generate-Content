@@ -10,18 +10,19 @@ export const BACKGROUNDS = [
 ];
 
 export const DEFAULT_CARD_CONTENT: CardContent = {
-  subTitle: 'KIẾN THỨC TERRARIUM #5',
-  title: 'Tại sao phải có lớp sỏi dưới đáy?',
-  description: 'Bí quyết thoát nước hoàn hảo',
+  subTitle: 'KIEN THUC TERRARIUM #5',
+  title: 'Tai sao phai co lop soi duoi day?',
+  description: 'Bi quyet thoat nuoc hoan hao',
   paragraphItems: [
-    'Terrarium là một hệ sinh thái khép kín, nên việc chọn đúng loại cây là vô cùng quan trọng...',
+    'Terrarium la mot he sinh thai khep kin, nen viec chon dung loai cay la vo cung quan trong...',
   ],
   highlight:
-    'Ánh sáng gián tiếp là chìa khóa vàng cho terrarium phát triển khỏe mạnh!',
+    'Anh sang gian tiep la chia khoa vang cho terrarium phat trien khoe manh!',
   listItems: [
-    'Thoát nước tự nhiên, tránh úng đọng',
-    'Bảo vệ rễ khỏi thối nát',
-    'Tạo không gian cho rễ hô hấp',
-    'Giúp cây phát triển khỏe mạnh',
+    'Thoat nuoc tu nhien, tranh ung dong',
+    'Bao ve re khoi thoi nat',
+    'Tao khong gian cho re ho hap',
+    'Giup cay phat trien khoe manh',
   ],
+  handle: '@happyterrarium',
 };

@@ -309,6 +309,14 @@ export const BackgroundImage = styled.div<{ $src: string }>`
   background-position: center;
   opacity: 0.5;
   z-index: 0;
+
+  [data-variant='4'] &,
+  [data-variant='5'] &,
+  [data-variant='6'] &,
+  [data-variant='7'] &,
+  [data-variant='8'] & {
+    opacity: 0.64;
+  }
 `;
 
 export const CardOverlay = styled.div`
@@ -338,6 +346,16 @@ export const HeaderBlock = styled.div`
     margin-bottom: 0;
     text-align: left;
   }
+
+  [data-variant='4'] &,
+  [data-variant='5'] &,
+  [data-variant='6'] &,
+  [data-variant='7'] &,
+  [data-variant='8'] & {
+    background: rgba(13, 13, 11, 0.94);
+    border-color: rgba(243, 156, 18, 0.4);
+    text-align: left;
+  }
 `;
 
 export const LogoRow = styled.div`
@@ -350,6 +368,16 @@ export const LogoRow = styled.div`
   [data-export-profile='tiktok'] & {
     flex-direction: row;
     gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  [data-variant='4'] &,
+  [data-variant='5'] &,
+  [data-variant='6'] &,
+  [data-variant='7'] &,
+  [data-variant='8'] & {
+    flex-direction: row;
+    gap: 10px;
     margin-bottom: 16px;
   }
 `;
@@ -366,6 +394,20 @@ export const LogoIcon = styled.div`
   box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3);
 
   [data-export-profile='tiktok'] & {
+    width: 32px;
+    height: 32px;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  [data-variant='4'] &,
+  [data-variant='5'] &,
+  [data-variant='6'] &,
+  [data-variant='7'] &,
+  [data-variant='8'] & {
     width: 32px;
     height: 32px;
 
@@ -411,13 +453,13 @@ export const MainTitle = styled.h1`
   color: #fff;
   font-size: 31px;
   font-weight: 900;
-  line-height: 1.14;
+  line-height: 1.28;
   margin: 0 0 10px;
   overflow-wrap: anywhere;
 
   [data-export-profile='tiktok'] & {
     font-size: 22px;
-    line-height: 1.16;
+    line-height: 1.32;
     margin-bottom: 6px;
   }
 `;
@@ -564,6 +606,227 @@ export const HighlightBox = styled.div`
     line-height: 1.55;
     margin-bottom: 24px;
   }
+`;
+
+export const FooterHandle = styled.div`
+  margin-top: auto;
+  padding-top: 16px;
+  text-align: center;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+`;
+
+export const StepList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+export const StepCard = styled.div`
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  padding: 14px 16px;
+  border: 1px solid rgba(243, 156, 18, 0.65);
+  border-radius: 12px;
+  background: rgba(12, 16, 8, 0.88);
+  color: #fff;
+`;
+
+export const StepNumber = styled.div`
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffb000 0%, #ff7a00 100%);
+  font-size: 14px;
+  font-weight: 800;
+`;
+
+export const StepText = styled.div`
+  min-width: 0;
+
+  strong,
+  span {
+    display: block;
+    overflow-wrap: anywhere;
+  }
+
+  strong {
+    margin-bottom: 5px;
+    font-size: 15px;
+    font-weight: 650;
+    line-height: 1.25;
+  }
+
+  span {
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 13px;
+    font-weight: 450;
+    line-height: 1.45;
+  }
+`;
+
+export const FactBox = styled.div`
+  margin-top: 0;
+  padding: 28px 26px;
+  border: 2px solid rgba(243, 156, 18, 0.72);
+  border-radius: 14px;
+  background: rgba(96, 87, 0, 0.74);
+  text-align: center;
+`;
+
+export const FactIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+  color: #b8ff55;
+`;
+
+export const FactText = styled.p`
+  margin: 0;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+`;
+
+export const QaContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+`;
+
+export const QuestionBox = styled.div`
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  padding: 18px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffa000 0%, #f27b00 100%);
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.35;
+  text-shadow: 0 1px 2px rgba(65, 30, 0, 0.45);
+  box-shadow: 0 10px 24px rgba(255, 128, 0, 0.2);
+  overflow-wrap: anywhere;
+`;
+
+export const AnswerBox = styled.div`
+  display: flex;
+  gap: 10px;
+  padding: 20px 18px;
+  border: 1px solid rgba(118, 206, 94, 0.55);
+  border-radius: 12px;
+  background: rgba(13, 13, 11, 0.9);
+  color: #fff;
+`;
+
+export const QaMark = styled.span<{ $answer?: boolean }>`
+  flex: 0 0 auto;
+  color: ${(props) => (props.$answer ? '#55f070' : '#fff')};
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+  text-shadow: ${(props) =>
+    props.$answer ? 'none' : '0 1px 2px rgba(65, 30, 0, 0.5)'};
+`;
+
+export const AnswerText = styled.div`
+  min-width: 0;
+
+  p {
+    margin: 0 0 18px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+export const IssueList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+`;
+
+export const IssueCard = styled.div`
+  padding: 18px;
+  border-radius: 10px;
+  border: 1px solid rgba(243, 156, 18, 0.16);
+  background: rgba(20, 37, 13, 0.9);
+  color: #fff;
+  overflow-wrap: anywhere;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    color: #ffb0b8;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  strong {
+    display: block;
+    color: #5dff75;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+`;
+
+export const QuoteBox = styled.div`
+  padding: 38px 28px;
+  border: 1px solid rgba(243, 156, 18, 0.65);
+  border-radius: 14px;
+  background: rgba(15, 15, 12, 0.9);
+  color: #fff;
+  text-align: center;
+`;
+
+export const QuoteMark = styled.div`
+  height: 30px;
+  color: #ffd21a;
+  font-size: 54px;
+  font-weight: 900;
+  line-height: 0.7;
+`;
+
+export const QuoteText = styled.p`
+  margin: 30px 0 26px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 18px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+`;
+
+export const QuoteDivider = styled.div`
+  width: 74px;
+  height: 1px;
+  margin: 0 auto 18px;
+  background: linear-gradient(90deg, transparent, #ffd21a, transparent);
+`;
+
+export const QuoteAuthor = styled.div`
+  color: #ffd21a;
+  font-size: 13px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
 `;
 
 export const ExportButton = styled.button`
