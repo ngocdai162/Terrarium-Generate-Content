@@ -19,7 +19,6 @@ const AssetPanel = memo(
             $src={background}
             aria-label={`Select background ${background}`}
             onClick={() => onSelectBackground(background)}
-            type="button"
           />
         ))}
       </S.BackgroundSelector>

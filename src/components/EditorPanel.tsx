@@ -19,8 +19,8 @@ type EditorPanelProps = {
 };
 
 const getListLabel = (variant: Variant) => {
-  if (variant === '4') return 'Step items: Title|Description';
-  if (variant === '7') return 'Issue items: Problem|Solution';
+  if (variant === '4') return 'Step items: Title | Description';
+  if (variant === '7') return 'Issue items: Problem | Solution';
   if (variant === '1') return 'Key points';
   return 'Supporting points';
 };
@@ -162,7 +162,7 @@ const EditorPanel = memo(
         )}
 
         <S.InputGroup>
-          <label>Handle footer</label>
+          <label>Footer handle</label>
           <input
             value={content.handle}
             onChange={(event) => onContentChange('handle', event.target.value)}

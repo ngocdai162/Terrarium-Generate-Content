@@ -118,26 +118,28 @@ const App = () => {
             onRemoveListItem={removeListItem}
             onRemoveParagraphItem={removeParagraphItem}
           />
-          <S.FieldLabel>Export Profile</S.FieldLabel>
-          <S.OptionSelector>
-            <S.OptionButton
-              $active={exportProfile === 'tiktok'}
-              onClick={() => setExportProfile('tiktok')}
-              type="button"
-            >
-              TikTok Safe
-            </S.OptionButton>
-            <S.OptionButton
-              $active={exportProfile === 'standard'}
-              onClick={() => setExportProfile('standard')}
-              type="button"
-            >
-              Original
-            </S.OptionButton>
-          </S.OptionSelector>
-          <S.ExportButton onClick={handleExport} disabled={isExporting} type="button">
-            {isExporting ? 'Exporting...' : 'Export Image'}
-          </S.ExportButton>
+          <S.ExportBlock>
+            <S.FieldLabel>Export Profile</S.FieldLabel>
+            <S.OptionSelector>
+              <S.OptionButton
+                $active={exportProfile === 'tiktok'}
+                onClick={() => setExportProfile('tiktok')}
+                type="button"
+              >
+                TikTok Safe
+              </S.OptionButton>
+              <S.OptionButton
+                $active={exportProfile === 'standard'}
+                onClick={() => setExportProfile('standard')}
+                type="button"
+              >
+                Original
+              </S.OptionButton>
+            </S.OptionSelector>
+            <S.ExportButton onClick={handleExport} disabled={isExporting} type="button">
+              {isExporting ? 'Exporting…' : 'Export Image'}
+            </S.ExportButton>
+          </S.ExportBlock>
         </S.EditorColumn>
 
         <S.PreviewColumn>

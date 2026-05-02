@@ -83,10 +83,14 @@ const VariantContent = memo(
     if (variant === '8') {
       return (
         <S.QuoteBox>
-          <S.QuoteMark>"</S.QuoteMark>
-          <S.QuoteText>{content.highlight}</S.QuoteText>
-          <S.QuoteDivider />
-          <S.QuoteAuthor>{content.paragraphItems[0] || 'Happy Terrarium'}</S.QuoteAuthor>
+          <S.QuoteMainCard>
+            <S.QuoteMark>"</S.QuoteMark>
+            <S.QuoteText>{content.highlight}</S.QuoteText>
+            <S.QuoteDivider />
+          </S.QuoteMainCard>
+          <S.QuoteAuthorCard>
+            <S.QuoteAuthor>{content.paragraphItems[0] || 'Happy Terrarium'}</S.QuoteAuthor>
+          </S.QuoteAuthorCard>
         </S.QuoteBox>
       );
     }
@@ -95,7 +99,9 @@ const VariantContent = memo(
       return (
         <S.ParagraphContainer>
           {content.paragraphItems.map((item, index) => (
-            <S.ParagraphText key={`${item}-${index}`}>{item}</S.ParagraphText>
+            <S.ParagraphChunk key={`${item}-${index}`}>
+              <S.ParagraphText>{item}</S.ParagraphText>
+            </S.ParagraphChunk>
           ))}
         </S.ParagraphContainer>
       );

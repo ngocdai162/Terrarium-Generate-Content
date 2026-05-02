@@ -8,7 +8,7 @@ type LayoutPanelProps = {
 };
 
 const LAYOUT_OPTIONS: { label: string; value: Variant }[] = [
-  { label: 'Classic', value: '1' },
+  { label: 'Classic list', value: '1' },
   { label: 'Article', value: '2' },
   { label: 'Highlight', value: '3' },
   { label: 'Steps', value: '4' },
