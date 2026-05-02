@@ -10,14 +10,14 @@ type AssetPanelProps = {
 const AssetPanel = memo(
   ({ backgrounds, selectedBackground, onSelectBackground }: AssetPanelProps) => (
     <S.AssetsSection>
-      <S.PanelTitle>Hình nền</S.PanelTitle>
+      <S.PanelTitle>Backgrounds</S.PanelTitle>
       <S.BackgroundSelector>
         {backgrounds.map((background) => (
           <S.BackgroundOption
             key={background}
             $active={selectedBackground === background}
             $src={background}
-            aria-label={`Chọn hình nền ${background}`}
+            aria-label={`Select background ${background}`}
             onClick={() => onSelectBackground(background)}
             type="button"
           />

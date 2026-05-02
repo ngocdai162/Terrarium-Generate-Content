@@ -3,6 +3,7 @@ import { toPng } from 'html-to-image';
 import AssetPanel from './components/AssetPanel';
 import CardPreview from './components/CardPreview';
 import EditorPanel from './components/EditorPanel';
+import LayoutPanel from './components/LayoutPanel';
 import { BACKGROUNDS, DEFAULT_CARD_CONTENT } from './constants';
 import * as S from './styles';
 import type { CardContent, ExportProfile, Variant } from './types';
@@ -83,7 +84,7 @@ const App = () => {
       link.click();
     } catch (err) {
       console.error('Export error:', err);
-      alert('Có lỗi xảy ra khi xuất ảnh.');
+      alert('An error occurred while exporting the image.');
     } finally {
       setIsExporting(false);
     }
@@ -93,11 +94,17 @@ const App = () => {
     <>
       <S.GlobalStyle />
       <S.Container>
-        <AssetPanel
-          backgrounds={BACKGROUNDS}
-          selectedBackground={bgImage}
-          onSelectBackground={setBgImage}
-        />
+        <S.PanelColumn>
+          <LayoutPanel selectedVariant={variant} onSelectVariant={setVariant} />
+        </S.PanelColumn>
+
+        <S.PanelColumn>
+          <AssetPanel
+            backgrounds={BACKGROUNDS}
+            selectedBackground={bgImage}
+            onSelectBackground={setBgImage}
+          />
+        </S.PanelColumn>
 
         <S.EditorColumn>
           <EditorPanel
@@ -110,9 +117,8 @@ const App = () => {
             onParagraphItemChange={updateParagraphItem}
             onRemoveListItem={removeListItem}
             onRemoveParagraphItem={removeParagraphItem}
-            onVariantChange={setVariant}
           />
-          <S.FieldLabel>Che do xuat anh</S.FieldLabel>
+          <S.FieldLabel>Export Profile</S.FieldLabel>
           <S.OptionSelector>
             <S.OptionButton
               $active={exportProfile === 'tiktok'}
@@ -126,11 +132,11 @@ const App = () => {
               onClick={() => setExportProfile('standard')}
               type="button"
             >
-              Anh goc
+              Original
             </S.OptionButton>
           </S.OptionSelector>
           <S.ExportButton onClick={handleExport} disabled={isExporting} type="button">
-            {isExporting ? 'Đang tạo ảnh...' : 'XUẤT ẢNH NGAY'}
+            {isExporting ? 'Exporting...' : 'Export Image'}
           </S.ExportButton>
         </S.EditorColumn>
 
