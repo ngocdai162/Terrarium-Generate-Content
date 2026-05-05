@@ -4,16 +4,56 @@ import AssetPanel from './components/AssetPanel';
 import CardPreview from './components/CardPreview';
 import EditorPanel from './components/EditorPanel';
 import LayoutPanel from './components/LayoutPanel';
-import { BACKGROUNDS, DEFAULT_CARD_CONTENT } from './constants';
+import {
+  BACKGROUNDS,
+  DEFAULT_CARD_CONTENT,
+  DEFAULT_CONTENT_VISIBILITY,
+  getDefaultContentByVariant,
+} from './constants';
 import * as S from './styles';
-import type { CardContent, ExportProfile, Variant } from './types';
+import type {
+  CardContent,
+  ContentVisibility,
+  ExportProfile,
+  TitleContainerStyle,
+  Variant,
+} from './types';
+
+const readFileAsDataUrl = (file: File) =>
+  new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+      if (typeof reader.result === 'string') {
+        resolve(reader.result);
+        return;
+      }
+      reject(new Error('Unable to read image file.'));
+    });
+    reader.addEventListener('error', () => {
+      reject(reader.error ?? new Error('Unable to read image file.'));
+    });
+    reader.readAsDataURL(file);
+  });
 
 const App = () => {
   const [variant, setVariant] = useState<Variant>('1');
   const [exportProfile, setExportProfile] = useState<ExportProfile>('tiktok');
   const [bgImage, setBgImage] = useState(BACKGROUNDS[0]);
   const [content, setContent] = useState<CardContent>(DEFAULT_CARD_CONTENT);
+  const [visibility, setVisibility] = useState<ContentVisibility>(
+    DEFAULT_CONTENT_VISIBILITY,
+  );
+  const [titleContainerStyle, setTitleContainerStyle] =
+    useState<TitleContainerStyle>({
+      showBackground: true,
+      showBorder: true,
+    });
   const [isExporting, setIsExporting] = useState(false);
+  const [initializedVariants, setInitializedVariants] = useState<
+    Partial<Record<Variant, boolean>>
+  >({
+    '1': true,
+  });
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleContentChange = useCallback(
@@ -69,13 +109,49 @@ const App = () => {
     }));
   }, []);
 
+  const handleTitleContainerStyleChange = useCallback(
+    <K extends keyof TitleContainerStyle>(key: K, value: TitleContainerStyle[K]) => {
+      setTitleContainerStyle((current) => ({ ...current, [key]: value }));
+    },
+    [],
+  );
+
+  const handleContentImageChange = useCallback(async (file: File) => {
+    const imageUrl = await readFileAsDataUrl(file);
+    setContent((current) => ({ ...current, contentImage: imageUrl }));
+  }, []);
+
+  const handleVisibilityChange = useCallback(
+    <K extends keyof ContentVisibility>(key: K, value: ContentVisibility[K]) => {
+      setVisibility((current) => ({ ...current, [key]: value }));
+    },
+    [],
+  );
+
+  const handleVariantChange = useCallback((nextVariant: Variant) => {
+    setVariant(nextVariant);
+    setInitializedVariants((current) => {
+      if (current[nextVariant]) return current;
+      setContent(getDefaultContentByVariant(nextVariant));
+      setVisibility(DEFAULT_CONTENT_VISIBILITY);
+      return { ...current, [nextVariant]: true };
+    });
+  }, []);
+
   const handleExport = useCallback(async () => {
     if (!cardRef.current) return;
 
     setIsExporting(true);
     try {
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+      });
       const dataUrl = await toPng(cardRef.current, {
         cacheBust: true,
+        filter: (node) => {
+          if (!(node instanceof HTMLElement)) return true;
+          return node.dataset.exportIgnore !== 'true';
+        },
         pixelRatio: 2,
       });
       const link = document.createElement('a');
@@ -95,7 +171,7 @@ const App = () => {
       <S.GlobalStyle />
       <S.Container>
         <S.PanelColumn>
-          <LayoutPanel selectedVariant={variant} onSelectVariant={setVariant} />
+          <LayoutPanel selectedVariant={variant} onSelectVariant={handleVariantChange} />
         </S.PanelColumn>
 
         <S.PanelColumn>
@@ -113,10 +189,15 @@ const App = () => {
             onAddListItem={addListItem}
             onAddParagraphItem={addParagraphItem}
             onContentChange={handleContentChange}
+            onContentImageChange={handleContentImageChange}
+            onTitleContainerStyleChange={handleTitleContainerStyleChange}
+            onVisibilityChange={handleVisibilityChange}
             onListItemChange={updateListItem}
             onParagraphItemChange={updateParagraphItem}
             onRemoveListItem={removeListItem}
             onRemoveParagraphItem={removeParagraphItem}
+            titleContainerStyle={titleContainerStyle}
+            visibility={visibility}
           />
           <S.ExportBlock>
             <S.FieldLabel>Export Profile</S.FieldLabel>
@@ -126,14 +207,21 @@ const App = () => {
                 onClick={() => setExportProfile('tiktok')}
                 type="button"
               >
-                TikTok Safe
+                TikTok
               </S.OptionButton>
               <S.OptionButton
-                $active={exportProfile === 'standard'}
-                onClick={() => setExportProfile('standard')}
+                $active={exportProfile === 'instagram-post'}
+                onClick={() => setExportProfile('instagram-post')}
                 type="button"
               >
-                Original
+                Instagram Post
+              </S.OptionButton>
+              <S.OptionButton
+                $active={exportProfile === 'facebook-post'}
+                onClick={() => setExportProfile('facebook-post')}
+                type="button"
+              >
+                Facebook Post
               </S.OptionButton>
             </S.OptionSelector>
             <S.ExportButton onClick={handleExport} disabled={isExporting} type="button">
@@ -148,6 +236,9 @@ const App = () => {
             background={bgImage}
             content={content}
             exportProfile={exportProfile}
+            isExporting={isExporting}
+            titleContainerStyle={titleContainerStyle}
+            visibility={visibility}
             variant={variant}
           />
         </S.PreviewColumn>

@@ -20,15 +20,21 @@ export const Container = styled.div`
   padding: 20px;
   min-height: 100vh;
   background-color: #121212;
-  width: 100vw;
+  width: 100%;
   margin: 0;
   box-sizing: border-box;
   overflow-x: hidden;
 
-  @media (min-width: 1440px) {
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-start;
+  @media (min-width: 1200px) {
+    display: grid;
+    grid-template-columns:
+      minmax(220px, 0.8fr)
+      minmax(220px, 0.8fr)
+      minmax(320px, 1.2fr)
+      minmax(260px, 420px);
+    align-items: start;
+    justify-content: stretch;
+    gap: clamp(12px, 1vw, 20px);
   }
 `;
 
@@ -36,10 +42,10 @@ export const PanelColumn = styled.div`
   width: 100%;
   max-width: 320px;
   flex-shrink: 0;
+  min-width: 0;
 
-  @media (min-width: 1440px) {
-    position: sticky;
-    top: 20px;
+  @media (min-width: 1200px) {
+    max-width: none;
   }
 `;
 
@@ -116,7 +122,7 @@ export const AddItemButton = styled(ActionButton)`
 export const EditorSection = styled.div`
   flex: 1;
   max-width: 600px;
-  min-width: 400px;
+  min-width: 0;
   background: #2a2a2a;
   padding: 28px 32px 32px;
   border-radius: 16px;
@@ -132,10 +138,9 @@ export const EditorSection = styled.div`
     border-radius: 4px;
   }
 
-  @media (min-width: 1440px) {
-    position: sticky;
-    top: 20px;
-    max-height: min(58vh, calc(100vh - 240px));
+  @media (min-width: 1200px) {
+    max-width: none;
+    max-height: min(58vh, calc(100vh - 220px));
   }
 `;
 
@@ -148,10 +153,8 @@ export const EditorColumn = styled.div`
   gap: 18px;
   min-width: 0;
 
-  @media (min-width: 1440px) {
-    position: sticky;
-    top: 20px;
-    align-self: flex-start;
+  @media (min-width: 1200px) {
+    max-width: none;
   }
 `;
 
@@ -171,13 +174,14 @@ export const ExportBlock = styled.div`
 `;
 
 export const PreviewColumn = styled.div`
+  width: 100%;
   flex-shrink: 0;
   display: flex;
   justify-content: center;
+  min-width: 0;
 
-  @media (min-width: 1440px) {
-    position: sticky;
-    top: 20px;
+  @media (min-width: 1200px) {
+    justify-content: flex-end;
   }
 `;
 
@@ -311,6 +315,55 @@ export const LayoutHighlightPreview = styled.div`
   border-radius: 3px;
 `;
 
+export const LayoutStatPreview = styled.div`
+  height: 40px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  &::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ff9800;
+  }
+
+  &::after {
+    content: '';
+    width: 38px;
+    height: 7px;
+    border-radius: 999px;
+    background: #fff;
+  }
+`;
+
+export const LayoutTipsGridPreview = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+
+  span {
+    height: 15px;
+    background: #263246;
+    border: 1px solid #3d4d69;
+    border-radius: 4px;
+  }
+`;
+
+export const LayoutImagePreview = styled.div`
+  height: 34px;
+  width: 100%;
+  border-radius: 4px;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08)),
+    linear-gradient(135deg, #3a5d43, #121812);
+  border: 1px solid rgba(184, 255, 85, 0.35);
+`;
+
 export const AssetsSection = styled(Section)``;
 
 export const OptionSelector = styled.div`
@@ -406,6 +459,39 @@ export const InputGroup = styled.div`
   }
 `;
 
+export const ContentImageUploadLabel = styled.label<{ $src: string }>`
+  width: 100%;
+  min-height: 150px;
+  border: 1px dashed #f39c12;
+  border-radius: 10px;
+  background:
+    linear-gradient(rgba(18, 18, 18, 0.25), rgba(18, 18, 18, 0.58)),
+    url(${props => props.$src});
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  span {
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(18, 18, 18, 0.72);
+    color: #f39c12;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  input {
+    display: none;
+  }
+`;
+
 export const ListItemInput = styled.div`
   display: flex;
   gap: 10px;
@@ -463,9 +549,10 @@ export const ExportButton = styled.button`
 // CARD PREVIEW STYLES
 export const CardPreview = styled.div<{ $exportProfile: ExportProfile }>`
   position: relative;
-  width: 450px;
-  height: 800px;
-  min-width: 450px;
+  width: min(100%, 420px);
+  aspect-ratio: ${props =>
+    props.$exportProfile === 'tiktok' ? '9 / 16' : '4 / 5'};
+  max-height: calc(100dvh - 40px);
   flex-shrink: 0;
   background-color: #121212;
   border-radius: 20px;
@@ -474,6 +561,10 @@ export const CardPreview = styled.div<{ $exportProfile: ExportProfile }>`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+
+  &[data-exporting='true'] {
+    border-radius: 0 !important;
+  }
 `;
 
 export const BackgroundImage = styled.div<{ $src: string }>`
@@ -518,16 +609,30 @@ export const CardOverlay = styled.div`
     justify-content: flex-start;
   }
 
-  [data-export-profile='standard'] & {
-    padding: 32px;
+  [data-export-profile='tiktok'][data-variant='11'] & {
+    padding-top: 132px;
+    padding-bottom: 182px;
+  }
+
+  [data-export-profile='instagram-post'] &,
+  [data-export-profile='facebook-post'] & {
+    padding: 56px 18px 56px;
+    gap: 8px;
+    justify-content: flex-start;
   }
 `;
 
-export const HeaderBlock = styled.div`
-  background: rgba(25, 25, 25, 0.95);
+export const HeaderBlock = styled.div<{
+  $showBackground?: boolean;
+  $showBorder?: boolean;
+}>`
+  background: ${props =>
+    props.$showBackground === false ? 'transparent' : 'rgba(25, 25, 25, 0.95)'};
   border-radius: 24px;
   padding: 32px;
-  border: 1px solid rgba(243, 156, 18, 0.15);
+  border: 1px solid
+    ${props =>
+      props.$showBorder === false ? 'transparent' : 'rgba(243, 156, 18, 0.15)'};
   margin-bottom: 24px;
   text-align: center;
   flex-shrink: 0;
@@ -536,6 +641,13 @@ export const HeaderBlock = styled.div`
     padding: 14px 16px;
     margin-bottom: 10px;
     border-radius: 18px;
+  }
+
+  [data-export-profile='instagram-post'] &,
+  [data-export-profile='facebook-post'] & {
+    padding: 18px 14px;
+    margin-bottom: 10px;
+    border-radius: 16px;
   }
 `;
 
@@ -548,6 +660,12 @@ export const LogoRow = styled.div`
 
   [data-export-profile='tiktok'] & {
     gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  [data-export-profile='instagram-post'] &,
+  [data-export-profile='facebook-post'] & {
+    gap: 7px;
     margin-bottom: 8px;
   }
 `;
@@ -571,6 +689,17 @@ export const LogoIcon = styled.div`
       height: 14px;
     }
   }
+
+  [data-export-profile='instagram-post'] &,
+  [data-export-profile='facebook-post'] & {
+    width: 32px;
+    height: 32px;
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
 `;
 
 export const LogoBrand = styled.span`
@@ -583,6 +712,12 @@ export const LogoBrand = styled.span`
   [data-export-profile='tiktok'] & {
     font-size: 13px;
     letter-spacing: 1.5px;
+  }
+
+  [data-export-profile='instagram-post'] &,
+  [data-export-profile='facebook-post'] & {
+    font-size: 12px;
+    letter-spacing: 1.2px;
   }
 `;
 
@@ -599,6 +734,13 @@ export const SubTitle = styled.div`
     letter-spacing: 1px;
     margin-bottom: 6px;
   }
+
+  [data-export-profile='instagram-post'] &,
+  [data-export-profile='facebook-post'] & {
+    font-size: 9px;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
 `;
 
 export const MainTitle = styled.h1`
@@ -613,6 +755,13 @@ export const MainTitle = styled.h1`
     line-height: 1.18;
     margin: 0 0 8px 0;
   }
+
+  [data-export-profile='instagram-post'] &,
+  [data-export-profile='facebook-post'] & {
+    font-size: 19px;
+    line-height: 1.15;
+    margin: 0 0 6px 0;
+  }
 `;
 
 export const Description = styled.p`
@@ -626,6 +775,12 @@ export const Description = styled.p`
     font-size: 13px;
     line-height: 1.35;
   }
+
+  [data-export-profile='instagram-post'] &,
+  [data-export-profile='facebook-post'] & {
+    font-size: 11px;
+    line-height: 1.3;
+  }
 `;
 
 // VARIANT STYLES
@@ -638,6 +793,12 @@ export const ListContainer = styled.div`
   [data-export-profile='tiktok'] & {
     margin-top: 0;
     gap: 8px;
+  }
+
+  [data-export-profile='instagram-post'] &,
+  [data-export-profile='facebook-post'] & {
+    margin-top: 0;
+    gap: 6px;
   }
 `;
 
@@ -660,6 +821,14 @@ export const ListItem = styled.div`
     border-radius: 12px;
     font-size: 13px;
     gap: 10px;
+  }
+
+  [data-export-profile='instagram-post'] &,
+  [data-export-profile='facebook-post'] & {
+    padding: 9px 10px;
+    border-radius: 11px;
+    font-size: 11px;
+    gap: 8px;
   }
 `;
 
@@ -764,6 +933,219 @@ export const FooterHandle = styled.div`
     font-size: 10px;
     letter-spacing: 0.5px;
   }
+
+  [data-export-profile='instagram-post'] &,
+  [data-export-profile='facebook-post'] & {
+    padding: 7px 12px;
+    font-size: 9px;
+    letter-spacing: 0.35px;
+  }
+`;
+
+export const TiktokChrome = styled.div`
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+`;
+
+export const TiktokTopBar = styled.div`
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+
+  div {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  strong {
+    font-size: 14px;
+    font-weight: 800;
+  }
+`;
+
+export const TiktokRightRail = styled.div`
+  position: absolute;
+  right: 10px;
+  bottom: 164px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+`;
+
+export const TiktokAvatar = styled.div`
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const TiktokAction = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 10px;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.45);
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+`;
+
+export const TiktokBottomMeta = styled.div`
+  position: absolute;
+  left: 14px;
+  right: 84px;
+  bottom: 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+
+  strong {
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  p {
+    margin: 0;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+  }
+`;
+
+export const TiktokBottomControls = styled.div`
+  position: absolute;
+  left: 50%;
+  bottom: 6px;
+  transform: translateX(-50%);
+  width: 122px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.35);
+`;
+
+export const InstagramChrome = styled.div`
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+`;
+
+export const InstagramTopBar = styled.div`
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  right: 12px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.45);
+
+  strong {
+    font-size: 16px;
+    font-weight: 800;
+    font-family: 'Quicksand', sans-serif;
+  }
+
+  div {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+`;
+
+export const InstagramBottomBar = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+`;
+
+export const FacebookChrome = styled.div`
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+`;
+
+export const FacebookTopBar = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 42px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.45), transparent);
+
+  strong {
+    font-size: 20px;
+    font-weight: 900;
+    color: #1877f2;
+  }
+`;
+
+export const FacebookBottomBar = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 42px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(15, 15, 15, 0.68);
+`;
+
+export const FacebookAction = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
 `;
 
 // NEW VARIANTS
@@ -776,6 +1158,12 @@ export const StepList = styled.div`
   [data-export-profile='tiktok'] & {
     margin-top: 0;
     gap: 8px;
+  }
+
+  [data-export-profile='instagram-post'] &,
+  [data-export-profile='facebook-post'] & {
+    margin-top: 0;
+    gap: 6px;
   }
 `;
 
@@ -794,6 +1182,13 @@ export const StepCard = styled.div`
     gap: 12px;
     border-radius: 12px;
   }
+
+  [data-export-profile='instagram-post'] &,
+  [data-export-profile='facebook-post'] & {
+    padding: 9px 10px;
+    gap: 9px;
+    border-radius: 10px;
+  }
 `;
 
 export const StepNumber = styled.div`
@@ -803,6 +1198,11 @@ export const StepNumber = styled.div`
   color: #f39c12;
   min-width: 2ch;
   text-align: left;
+
+  [data-export-profile='instagram-post'] &,
+  [data-export-profile='facebook-post'] & {
+    font-size: 18px;
+  }
 `;
 
 export const StepText = styled.div`
@@ -813,6 +1213,15 @@ export const StepText = styled.div`
   color: #e8e8e8;
   strong { color: #fff; font-weight: 700; }
   span { color: #c8c8c8; font-size: 12px; }
+
+  [data-export-profile='instagram-post'] &,
+  [data-export-profile='facebook-post'] & {
+    font-size: 12px;
+
+    span {
+      font-size: 10px;
+    }
+  }
 `;
 
 export const FactBox = styled.div`
@@ -1013,4 +1422,238 @@ export const QuoteAuthor = styled.div`
     font-size: 11px;
     letter-spacing: 1px;
   }
+`;
+
+export const WarningContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: auto;
+
+  [data-export-profile='tiktok'] & {
+    margin-top: 0;
+  }
+`;
+
+export const WarningIcon = styled.div`
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffa900, #ff6b00);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+`;
+
+export const WarningStat = styled.div`
+  font-size: 42px;
+  font-weight: 900;
+  line-height: 1;
+  color: #fff;
+
+  [data-export-profile='tiktok'] & {
+    font-size: 34px;
+  }
+`;
+
+export const WarningReason = styled.div`
+  color: #ffa900;
+  font-size: 16px;
+  font-weight: 800;
+
+  [data-export-profile='tiktok'] & {
+    font-size: 14px;
+  }
+`;
+
+export const WarningTitle = styled.div`
+  color: #fff;
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1.12;
+  text-transform: uppercase;
+
+  [data-export-profile='tiktok'] & {
+    font-size: 22px;
+  }
+`;
+
+export const WarningInfoBox = styled.div`
+  width: 100%;
+  box-sizing: border-box;
+  padding: 16px 18px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+
+  [data-export-profile='tiktok'] & {
+    font-size: 12px;
+    padding: 14px 14px;
+  }
+`;
+
+export const WarningCta = styled.div`
+  margin-top: 2px;
+  max-width: 260px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ffa900, #ff6400);
+  color: white;
+  font-size: 13px;
+  font-weight: 800;
+
+  [data-export-profile='tiktok'] & {
+    font-size: 12px;
+    padding: 10px 20px;
+  }
+`;
+
+export const TipsContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: auto;
+
+  [data-export-profile='tiktok'] & {
+    margin-top: 0;
+    gap: 8px;
+  }
+`;
+
+export const TipsTitle = styled.div`
+  color: #fff;
+  font-size: 34px;
+  font-weight: 900;
+  line-height: 1.05;
+  text-transform: uppercase;
+
+  [data-export-profile='tiktok'] & {
+    font-size: 28px;
+  }
+`;
+
+export const TipsSubtitle = styled.div`
+  color: #ffa900;
+  font-size: 17px;
+  font-weight: 800;
+
+  [data-export-profile='tiktok'] & {
+    font-size: 14px;
+  }
+`;
+
+export const TipsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+
+  [data-export-profile='tiktok'] & {
+    gap: 8px;
+  }
+`;
+
+export const TipCard = styled.div<{ $index: number }>`
+  min-height: 104px;
+  padding: 12px 8px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(38, 50, 70, 0.86);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  strong {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 900;
+    line-height: 1.1;
+  }
+
+  span {
+    color: #e5e8ee;
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1.25;
+  }
+`;
+
+export const TipIcon = styled.div<{ $index: number }>`
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background: #f39c12;
+`;
+
+export const TipsCta = styled.div`
+  margin-top: 2px;
+  padding: 16px 14px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ffa900, #ff6400);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  strong {
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1.15;
+  }
+
+  span {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+`;
+
+export const ImageNoteContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
+
+  [data-export-profile='tiktok'] & {
+    margin-top: 0;
+    gap: 8px;
+  }
+`;
+
+export const ImageNoteMedia = styled.img`
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  border-radius: 16px;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+`;
+
+export const ImageNoteText = styled.div`
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(18, 18, 18, 0.94);
+  border: 1px solid rgba(243, 156, 18, 0.2);
+  color: #f3f3f3;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.35;
+  text-align: left;
 `;

@@ -16,6 +16,9 @@ const LAYOUT_OPTIONS: { label: string; value: Variant }[] = [
   { label: 'Q&A', value: '6' },
   { label: 'Issues', value: '7' },
   { label: 'Quote', value: '8' },
+  { label: 'Warning', value: '9' },
+  { label: 'Tips Grid', value: '10' },
+  { label: 'Image Note', value: '11' },
 ];
 
 const LayoutThumbnail = memo(({ variant }: { variant: Variant }) => (
@@ -56,7 +59,10 @@ const LayoutThumbnail = memo(({ variant }: { variant: Variant }) => (
         </>
       )}
       {variant === '8' && <S.LayoutQuotePreview />}
-      {!['2', '4', '5', '6', '7', '8'].includes(variant) && (
+      {variant === '9' && <S.LayoutStatPreview />}
+      {variant === '10' && <S.LayoutTipsGridPreview />}
+      {variant === '11' && <S.LayoutImagePreview />}
+      {!['2', '4', '5', '6', '7', '8', '9', '10', '11'].includes(variant) && (
         <>
           <S.LayoutListPreview />
           {variant === '3' && <S.LayoutHighlightPreview />}
